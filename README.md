@@ -12,6 +12,8 @@
 <br />
 <br />
 
+This bundle helps you connect to your favourite transporter and render React templates as email. It is thought to work with TypeScript and enjoy type-safety.
+
 ## Install
 
 ```bash
