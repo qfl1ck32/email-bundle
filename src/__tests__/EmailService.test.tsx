@@ -2,7 +2,7 @@ import * as React from "react";
 import { EmailService } from "../services/EmailService";
 import { EventManager } from "@kaviar/core";
 import { Transporter } from "nodemailer";
-import { ITransporter } from "../defs";
+import { ITransporter, IReactEmailTemplate } from "../defs";
 import { MailOptions } from "nodemailer/lib/smtp-transport";
 import { assert } from "chai";
 
@@ -27,8 +27,13 @@ describe("EmailService", () => {
     interface IProps {
       name: string;
     }
-    const Component: React.FC<IProps> = (props) => {
+
+    const Component: IReactEmailTemplate<IProps> = (props) => {
       return <>Hello friend, {props.name}</>;
+    };
+
+    Component.subject = (props) => {
+      return "x";
     };
 
     await service.send<IProps>(

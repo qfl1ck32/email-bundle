@@ -7,7 +7,7 @@ import {
 import { Transporter } from "nodemailer";
 import { SentMessageInfo } from "nodemailer/lib/smtp-connection";
 import {
-  IEmailTemplate,
+  IEmailSendingTemplateConfig,
   IEmailBundleConfigDefaults,
   ITransporter,
 } from "../defs";
@@ -37,7 +37,7 @@ export class EmailService {
    * @param email
    */
   async send<Props = any>(
-    emailTemplate: IEmailTemplate<Props>,
+    emailTemplate: IEmailSendingTemplateConfig<Props>,
     mailOptions: MailOptions
   ): Promise<SentMessageInfo> {
     this.applyDefaults(emailTemplate, mailOptions);
@@ -86,7 +86,7 @@ export class EmailService {
    * Extends email to render its component to html
    * @param email
    */
-  protected renderEmail(emailTemplate: IEmailTemplate): string {
+  protected renderEmail(emailTemplate: IEmailSendingTemplateConfig): string {
     return renderToStaticMarkup(
       React.createElement(emailTemplate.component, emailTemplate.props)
     );
@@ -96,7 +96,7 @@ export class EmailService {
    * This method is used to apply the defaults specified in the bundle configuration
    */
   protected applyDefaults(
-    emailTemplate: IEmailTemplate,
+    emailTemplate: IEmailSendingTemplateConfig,
     mailOptions: MailOptions
   ) {
     if (!mailOptions.from) {

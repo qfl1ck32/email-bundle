@@ -2,7 +2,7 @@
   "name": "@kaviar/email-bundle",
   "version": "1.0.0",
   "private": true,
-  "description": "Provides easy strategy to send emails using React",
+  "description": "Provides easy strategy to send emails using server-side rendered React templates",
   "main": "dist/index.js",
   "repository": {
     "type": "git",
