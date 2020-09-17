@@ -13,7 +13,6 @@ describe("EmailService", () => {
     const to = "johnas@smith.com";
     const transporter: ITransporter = {
       async sendMail(mailOptions: MailOptions) {
-        console.log(mailOptions.html);
         assert.isTrue(
           mailOptions.html.toString().indexOf("Hello friend, Johnas") === 0
         );
