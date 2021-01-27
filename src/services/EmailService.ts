@@ -18,7 +18,7 @@ import {
 } from "../events";
 import { renderToStaticMarkup } from "react-dom/server";
 import * as React from "react";
-import nodemailer from "nodemailer";
+import * as nodemailer from "nodemailer";
 import { MailOptions } from "nodemailer/lib/smtp-transport";
 
 export class EmailService {
