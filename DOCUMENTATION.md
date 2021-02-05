@@ -9,7 +9,9 @@ npm install @kaviar/email-bundle react react-dom
 ## Emails
 
 ```typescript
-new KaviarEmailBundle(config);
+kernel.addBundle(
+  new EmailBundle(config);
+)
 
 // The config interface
 
