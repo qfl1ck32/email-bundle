@@ -1,33 +1,36 @@
 This bundle helps you connect to your favorite (swapable) transporter and render React templates as email. It is thought to work with TypeScript and enjoy type-safety.
 
-## Installation
+## Install
 
 ```bash
 npm install @kaviar/email-bundle react react-dom
 ```
 
-# Email Bundle
+## Emails
 
 ```typescript
 new KaviarEmailBundle(config);
 
 // The config interface
-:
+
 export interface IEmailBundleConfig {
   /**
-   * If you don't pass a transporter, a test transporter will be created
-   * and emails will be easily viewed online in a web page.
-   * Or you may want to inject a custom transporter later on from your bundles.
+   * If you don't pass a transporter, a test transporter will be
+   * created with nodemailer (allowing you view your emails online without any SMTP).
+   * If the test transporter cannot be created, it will default to console
    */
-  transporter?: {
-      host: string;
-      port: number;
-      secure?: boolean;
-      auth?: {
-        user: string;
-        pass: string;
+  transporter?:
+    | "console" // Will console log the email data
+    | "nodemailer-test" // Will generate a Preview URL using nodemailer test accounts
+    | {
+        host: string;
+        port: number;
+        secure?: boolean;
+        auth?: {
+          user: string;
+          pass: string;
+        };
       };
-    };
   defaults: {
     from?: string;
     /**
@@ -38,7 +41,7 @@ export interface IEmailBundleConfig {
 }
 ```
 
-You can use it by either providing your own custom transport, you can customise this heavily.
+You can use it by either providing your own custom transport, you can customise this heavily. A common example would be to use Mailgun HTTP API to send emails:
 
 ```typescript
 import * as mg from "nodemailer-mailgun-transport";
@@ -60,13 +63,13 @@ Read more here:
 
 And if you want to have a registered, service-dependency container that creates the transport inside your bundle, then, in the `hook()` phase, listen to `BundleBeforePrepareEvent` and `setTransporter()` with your own custom transport solution. Same logic would apply if you want to extend the global props (props that reach any email template).
 
-## Usage
+## Templates
 
 Let's create an email template:
 
 ```typescript
 // https://nodemailer.com/about/
-const emailService = this.get<EmailService>(EmailService);
+const emailService = container.get(EmailService);
 
 export interface IWelcomeEmailProps {
   name: string;

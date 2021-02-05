@@ -25,8 +25,24 @@ export interface IEmailBundleConfigDefaults {
   props?: SimpleObjectType;
 }
 
+export type ImplicitTransports = "console" | "nodemailer-test";
+
+export type ConfigTransporterType =
+  | ImplicitTransports
+  | Transport
+  | {
+      host: string;
+      port: number;
+      secure?: boolean;
+      auth?: {
+        user: string;
+        pass: string;
+      };
+    };
+
 export interface IEmailBundleConfig {
   transporter?:
+    | ImplicitTransports
     | Transport
     | {
         host: string;

@@ -1,14 +1,19 @@
 import { Bundle, BundlePhase } from "@kaviar/core";
-import { IEmailBundleConfig } from "./defs";
+import { IEmailBundleConfig, ConfigTransporterType } from "./defs";
 import {
   NODEMAILER_INSTANCE,
   NODEMAILER_TEST_MODE,
   EMAIL_DEFAULTS,
 } from "./constants";
 import * as nodemailer from "nodemailer";
+import { LoggerService, LoggerBundle } from "@kaviar/logger-bundle";
+import { ConsoleTransporter } from "./services/ConsoleTransporter";
 
 export class EmailBundle extends Bundle<IEmailBundleConfig> {
+  dependencies = [LoggerBundle];
+
   protected defaultConfig: IEmailBundleConfig = {
+    transporter: "console",
     defaults: {
       from: `"KAVIAR" <no-reply@kaviarjs.org>`,
       props: {},
@@ -18,12 +23,8 @@ export class EmailBundle extends Bundle<IEmailBundleConfig> {
   async prepare() {
     let { transporter } = this.config;
 
-    if (!transporter) {
-      this.container.set(NODEMAILER_TEST_MODE, true);
-      transporter = await this.getTestAccountInfo();
-    } else {
-      this.container.set(NODEMAILER_TEST_MODE, false);
-    }
+    this.container.set(NODEMAILER_TEST_MODE, false);
+    transporter = await this.getTransporter(transporter);
 
     this.container.set(
       NODEMAILER_INSTANCE,
@@ -31,6 +32,33 @@ export class EmailBundle extends Bundle<IEmailBundleConfig> {
     );
 
     this.container.set(EMAIL_DEFAULTS, this.config.defaults);
+  }
+
+  private async getTransporter(transporter: ConfigTransporterType) {
+    if (transporter === "console") {
+      return ConsoleTransporter;
+    }
+
+    const logger = this.container.get(LoggerService);
+
+    if (transporter === "nodemailer-test") {
+      try {
+        logger.info("Creating email test account");
+        transporter = await this.getTestAccountInfo();
+        console.log("after");
+        this.container.set(NODEMAILER_TEST_MODE, true);
+
+        return transporter;
+      } catch (err) {
+        logger.warning(
+          `We could not create a nodemailer test account. All emails will be logged in console.`
+        );
+
+        return ConsoleTransporter;
+      }
+    }
+
+    return transporter;
   }
 
   async getTestAccountInfo() {
