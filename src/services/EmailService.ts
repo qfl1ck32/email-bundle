@@ -1,4 +1,4 @@
-import { Inject, EventManager } from "@kaviar/core";
+import { Inject, EventManager, Service } from "@kaviar/core";
 import {
   NODEMAILER_INSTANCE,
   NODEMAILER_TEST_MODE,
@@ -21,6 +21,7 @@ import * as React from "react";
 import * as nodemailer from "nodemailer";
 import { MailOptions } from "nodemailer/lib/smtp-transport";
 
+@Service()
 export class EmailService {
   constructor(
     @Inject(NODEMAILER_INSTANCE)
