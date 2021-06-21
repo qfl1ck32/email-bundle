@@ -1,6 +1,6 @@
 {
   "name": "@kaviar/email-bundle",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Provides easy strategy to send emails using server-side rendered React templates",
   "main": "dist/index.js",
   "repository": {
