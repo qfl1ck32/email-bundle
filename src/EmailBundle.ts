@@ -45,7 +45,6 @@ export class EmailBundle extends Bundle<IEmailBundleConfig> {
       try {
         logger.info("Creating email test account");
         transporter = await this.getTestAccountInfo();
-        console.log("after");
         this.container.set(NODEMAILER_TEST_MODE, true);
 
         return transporter;
